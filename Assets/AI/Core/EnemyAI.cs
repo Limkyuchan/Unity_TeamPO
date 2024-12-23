@@ -20,7 +20,7 @@ public class EnemyAI : MonoBehaviour
     public bool FindPlayer()
     {
         // 플레이어 탐지 로직
-        //return Vector3.Distance(transform.position, Player.Instance.transform.position) < 10f;
+        // return Vector3.Distance(transform.position, Player.Instance.transform.position) < 10f;
         return true;
     }
 
