@@ -1,24 +1,18 @@
 using UnityEngine;
 
-public class AttackState : ICharacterAI
+public class AttackState : BaseState
 {
-    public void EnterState()
+    public override void EnterState()
     {
         Debug.Log("Entered Attack State");
     }
 
-    public void Execute()
+    public override void UpdateState()
     {
         Debug.Log("Execute Attack State");
-
-        // 플레이어가 사거리에서 벗어나면 상태 전환
-        //if (Vector3.Distance(enemy.transform.position, Player.Instance.transform.position) > 2f)
-        //{
-        //    enemy.SwitchState(new ChaseState());
-        //}
     }
 
-    public void ExitState()
+    public override void ExitState()
     {
         Debug.Log("Exiting Attack State");
     }

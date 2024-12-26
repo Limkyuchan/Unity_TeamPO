@@ -1,39 +1,35 @@
 using UnityEngine;
+using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : BaseAI
 {
-    ICharacterAI m_currentState;
-    IMovementStrategy m_movementStrategy;
-    IAttackStrategy m_attackStrategy;
+    NavMeshAgent m_agent;
+    GameObject m_player;
 
-    public void ChangeState(ICharacterAI newState)
+    protected override void Start()
     {
-        if (m_currentState != null)
+        base.Start();
+
+        m_agent = GetComponent<NavMeshAgent>();
+        m_player = GameObject.FindWithTag("Player");
+
+        // 초기 상태: Idle
+        m_stateMachine.ChangeState(new IdleState(m_agent, transform, CharacterType.Enemy, m_stateMachine));
+    }
+
+    protected override void Update()
+    {
+        if (m_player != null)
         {
-            m_currentState.ExitState();
+            float distance = Vector3.Distance(transform.position, m_player.transform.position);
+
+            // 주인공과의 거리가 10 이하면 Chase 상태로 전환
+            if (distance < 10f)
+            {
+                m_stateMachine.ChangeState(new ChaseState(m_agent, m_player.transform, CharacterType.Enemy));
+            }
         }
 
-        m_currentState = newState;
-        m_currentState.EnterState();
-    }
-
-    public bool FindPlayer()
-    {
-        // 플레이어 탐지 로직
-        // return Vector3.Distance(transform.position, Player.Instance.transform.position) < 10f;
-        return true;
-    }
-
-    void Start()
-    {
-        ChangeState(new IdleState());
-    }
-
-    void Update()
-    {
-        if (m_currentState != null)
-        {
-            
-        }
+        m_stateMachine.UpdateState();
     }
 }

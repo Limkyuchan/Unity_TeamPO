@@ -1,31 +1,39 @@
 using UnityEngine;
+using UnityEngine.AI;
 
-public class ChaseState : ICharacterAI
+public class ChaseState : BaseState
 {
-    public void EnterState()
+    NavMeshAgent m_agent;
+    Transform m_target;
+    CharacterType m_characterType;
+
+    public ChaseState(NavMeshAgent agent, Transform target, CharacterType characterType)
     {
-        Debug.Log("Entered Chase State");
+        m_agent = agent;
+        m_target = target;
+        m_characterType = characterType;
     }
 
-    public void Execute()
+    public override void EnterState()
     {
-        Debug.Log("Execute Chase State");
-        // 플레이어를 따라 이동
-        //enemy.transform.position = Vector3.MoveTowards(
-        //    enemy.transform.position,
-        //    Player.Instance.transform.position,
-        //    Time.deltaTime * 3f // 추적 속도
-        //);
-
-        // 공격 사거리 내에 들어가면 상태 전환
-        //    if (Vector3.Distance(enemy.transform.position, Player.Instance.transform.position) < 2f)
-        //    {
-        //        enemy.SwitchState(new AttackState());
-        //    }
+       
     }
 
-    public void ExitState()
+    public override void UpdateState()
     {
-        Debug.Log("Exiting Chase State");
+        if (m_target != null)
+        {
+            m_agent.SetDestination(m_target.position);
+        }
+        
+        if (m_characterType == CharacterType.Enemy)
+        {
+            Debug.Log("Chase Chase Chase");
+        }
+    }
+
+    public override void ExitState()
+    {
+       
     }
 }
