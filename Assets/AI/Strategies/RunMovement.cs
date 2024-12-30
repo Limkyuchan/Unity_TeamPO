@@ -1,16 +1,11 @@
 using UnityEngine;
+using UnityEngine.AI;
 
-public class RunMovement : MonoBehaviour
+public class RunMovement : IMovementStrategy
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Move(NavMeshAgent agent, Vector3 targetPosition)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        agent.speed = 2f;
+        agent.SetDestination(targetPosition);
     }
 }

@@ -18,27 +18,25 @@ public class IdleState : BaseState
 
     public override void EnterState()
     {
-        if (m_characterType == CharacterType.Player)
-        {
-            // 랜덤 위치 이동: Patrol 상태로 전환
-            m_stateMachine.ChangeState(new PatrolState(m_agent, m_selfTransform, CharacterType.Player));
-        }
-        else if (m_characterType == CharacterType.Enemy)    // 적: 주인공 방향으로 이동
-        {
-            m_stateMachine.ChangeState(new PatrolState(m_agent, m_selfTransform, CharacterType.Enemy));
-        }
+        
     }
 
     public override void UpdateState()
     {
-        if (m_characterType == CharacterType.Enemy)
+        if (m_characterType == CharacterType.Player)
         {
-            Debug.Log("Idle Idle Idle");
+            // 주인공: 랜덤 위치 이동
+            m_stateMachine.ChangeState(new PatrolState(m_agent, m_selfTransform, CharacterType.Player, new WalkMovement()));
+        }
+        else if (m_characterType == CharacterType.Enemy)
+        {
+            // 적: 주인공 방향으로 이동
+            m_stateMachine.ChangeState(new PatrolState(m_agent, m_selfTransform, CharacterType.Enemy, new WalkMovement()));
         }
     }
 
     public override void ExitState()
     {
-       
+
     }
 }

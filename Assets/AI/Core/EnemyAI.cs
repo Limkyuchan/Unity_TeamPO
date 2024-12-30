@@ -6,6 +6,20 @@ public class EnemyAI : BaseAI
     NavMeshAgent m_agent;
     GameObject m_player;
 
+    float m_detectDist = 12f;
+    float m_attackDist = 2f;
+
+    void OnDrawGizmos()
+    {
+        // 탐지 사거리
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, m_detectDist);
+
+        // 공격 사거리
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, m_attackDist);
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -21,15 +35,15 @@ public class EnemyAI : BaseAI
     {
         if (m_player != null)
         {
-            float distance = Vector3.Distance(transform.position, m_player.transform.position);
+            Vector3 direction = m_player.transform.position - transform.position;
+            float distanceSqr = direction.sqrMagnitude;
 
-            // 주인공과의 거리가 10 이하면 Chase 상태로 전환
-            if (distance < 10f)
+            // 주인공과의 거리가 12 이하면 Chase 상태로 전환
+            if (distanceSqr < (m_detectDist * m_detectDist))
             {
-                m_stateMachine.ChangeState(new ChaseState(m_agent, m_player.transform, CharacterType.Enemy));
+                m_stateMachine.ChangeState(new ChaseState(m_agent, m_player.transform, CharacterType.Enemy, new RunMovement(), m_stateMachine));
             }
         }
-
         m_stateMachine.UpdateState();
     }
 }

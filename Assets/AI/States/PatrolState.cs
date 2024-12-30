@@ -6,13 +6,16 @@ public class PatrolState : BaseState
     NavMeshAgent m_agent;
     Transform m_selfTransform;
     Transform m_target;
-    CharacterType m_characterType;
 
-    public PatrolState(NavMeshAgent agent, Transform selfTransform, CharacterType characterType)
+    CharacterType m_characterType;
+    IMovementStrategy m_movementStrategy;
+
+    public PatrolState(NavMeshAgent agent, Transform selfTransform, CharacterType characterType, IMovementStrategy movementStrategy)
     {
         m_agent = agent;
         m_selfTransform = selfTransform;
         m_characterType = characterType;
+        m_movementStrategy = movementStrategy;
         m_target = GameObject.FindWithTag("Player").transform;
     }
 
@@ -26,7 +29,7 @@ public class PatrolState : BaseState
         else if (m_characterType == CharacterType.Enemy)
         {
             // 적은 주인공 방향으로 이동
-            MoveTowardsPlayer();
+            MoveToPlayer();
         }
     }
 
@@ -43,14 +46,13 @@ public class PatrolState : BaseState
         else if (m_characterType == CharacterType.Enemy)
         {
             // 주인공을 향해 계속 이동
-            MoveTowardsPlayer();
-            Debug.Log("Patrol Patrol Patrol");
+            MoveToPlayer();
         }
     }
 
     public override void ExitState()
     {
-        
+
     }
 
     void PlayerMoveRandomly()
@@ -60,11 +62,11 @@ public class PatrolState : BaseState
 
         if (NavMesh.SamplePosition(randomDirection, out hit, 5f, NavMesh.AllAreas))
         {
-            m_agent.SetDestination(hit.position);
+            m_movementStrategy.Move(m_agent, hit.position);
         }
     }
 
-    void MoveTowardsPlayer()
+    void MoveToPlayer()
     {
         if (m_characterType == CharacterType.Enemy && m_selfTransform != null && m_agent != null && m_agent.pathPending == false)
         {
@@ -74,7 +76,9 @@ public class PatrolState : BaseState
                 if (m_agent.destination != m_selfTransform.position)
                 {
                     Vector3 direction = (m_target.position - m_selfTransform.position).normalized;
-                    m_agent.SetDestination(m_selfTransform.position + direction * 2f);
+                    Vector3 targetPosition = m_selfTransform.position + direction * 2f;
+
+                    m_movementStrategy.Move(m_agent, targetPosition);
                 }
             }
         }

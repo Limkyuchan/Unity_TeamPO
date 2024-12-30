@@ -1,16 +1,14 @@
 using UnityEngine;
+using UnityEngine.AI;
 
-public class AvoidMovement : MonoBehaviour
+public class AvoidMovement : IMovementStrategy
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Move(NavMeshAgent agent, Vector3 targetPosition)
     {
-        
-    }
+        float speed = 12f;
+        agent.speed = speed;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Vector3 direction = (agent.transform.position - targetPosition).normalized;
+        agent.SetDestination(agent.transform.position + direction * 6f);        // 회피 거리 설정
     }
 }
