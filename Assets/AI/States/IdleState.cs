@@ -16,10 +16,7 @@ public class IdleState : BaseState
         m_stateMachine = stateMachine;
     }
 
-    public override void EnterState()
-    {
-        
-    }
+    public override void EnterState() { }
 
     public override void UpdateState()
     {
@@ -35,8 +32,5 @@ public class IdleState : BaseState
         }
     }
 
-    public override void ExitState()
-    {
-
-    }
+    public override void ExitState() { }
 }

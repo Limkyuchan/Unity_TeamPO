@@ -50,10 +50,7 @@ public class PatrolState : BaseState
         }
     }
 
-    public override void ExitState()
-    {
-
-    }
+    public override void ExitState() { }
 
     void PlayerMoveRandomly()
     {

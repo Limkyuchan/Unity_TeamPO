@@ -1,16 +1,17 @@
 using UnityEngine;
+using UnityEngine.AI;
 
-public class BasicAttack : MonoBehaviour
+public class BasicAttack : IAttackStrategy
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Attack(CharacterType type, NavMeshAgent agent, Transform target)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (type == CharacterType.Player)
+        {
+            Debug.Log("Player ------- Basic Attack");
+        }
+        else if (type == CharacterType.Enemy)
+        {
+            Debug.Log("Enemy ------- Basic Attack");
+        }
     }
 }

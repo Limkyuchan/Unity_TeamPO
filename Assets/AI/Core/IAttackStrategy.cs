@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public interface IAttackStrategy
 {
-    void Attack();
+    void Attack(CharacterType type, NavMeshAgent agent, Transform target);
 }
